@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDemoMessageRequest;
 use App\Models\DemoMessage;
+use App\Models\PollResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -11,11 +12,12 @@ use Illuminate\View\View;
 class DemoMessageController extends Controller
 {
     /**
-     * Show the landing page with the latest messages read from the database.
+     * Show the landing page with the poll and the latest messages read from the database.
      */
     public function index(): View
     {
         return view('welcome', [
+            'questions' => PollResponse::QUESTIONS,
             'messages' => DemoMessage::query()->latest('id')->limit(10)->get(),
             'messageCount' => DemoMessage::query()->count(),
             'databaseName' => $this->databaseName(DB::connection()->getDriverName()),

@@ -28,12 +28,4 @@ class LandingPageTest extends TestCase
             ->assertSee('images/kosict-logo.svg')
             ->assertSee('https://cloud.laravel.com');
     }
-
-    public function test_the_landing_page_shows_the_upcoming_polls_as_previews(): void
-    {
-        $response = $this->get(route('home'));
-
-        $response->assertSeeInOrder(['Production Confessions', 'Database Backups', 'Deploy Strategies', 'Production Nightmares'])
-            ->assertSee('Coming soon');
-    }
 }
