@@ -11,7 +11,13 @@ class LandingPageTest extends TestCase
         $response = $this->get(route('home'));
 
         $response->assertOk()
-            ->assertSee('Production Confessions')
+            ->assertSeeInOrder([
+                'Laravel Cloud:',
+                'From Code to Production',
+                'Without the Infrastructure Headache',
+                'Build it. Push it. Deploy it.',
+                'Let Laravel Cloud handle the rest.',
+            ])
             ->assertSee("Anonymous confessions from developers who've seen things.", false)
             ->assertSee('Adapt.')
             ->assertSee('October 9–10, 2026')
@@ -24,7 +30,7 @@ class LandingPageTest extends TestCase
     {
         $response = $this->get(route('home'));
 
-        $response->assertSeeInOrder(['Database Backups', 'Deploy Strategies', 'Production Nightmares'])
+        $response->assertSeeInOrder(['Production Confessions', 'Database Backups', 'Deploy Strategies', 'Production Nightmares'])
             ->assertSee('Coming soon')
             ->assertDontSee('<form', false);
     }
