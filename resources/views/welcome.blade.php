@@ -47,23 +47,50 @@
 
     <x-mysql-demo :messages="$messages" :message-count="$messageCount" :database-name="$databaseName" />
 
-    <section aria-labelledby="preview-title" class="pb-12 lg:pb-14">
+    <section aria-labelledby="poll-title" class="pb-12 lg:pb-14">
         <div class="flex items-center gap-4">
-            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-mute">Coming up in the live demo</p>
+            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-mute">Live poll</p>
             <span aria-hidden="true" class="hidden h-px flex-1 bg-gradient-to-r from-line to-transparent sm:block"></span>
         </div>
 
         <div class="mt-3 flex flex-col gap-x-6 gap-y-2 lg:flex-row lg:items-baseline">
-            <h2 id="preview-title" class="text-3xl font-extrabold tracking-[-0.03em] text-fg sm:text-4xl">
+            <h2 id="poll-title" class="text-3xl font-extrabold tracking-[-0.03em] text-fg sm:text-4xl">
                 Production <span class="whitespace-nowrap">Confessions <span aria-hidden="true">🔥</span></span>
             </h2>
             <p class="text-base text-body sm:text-lg">Anonymous confessions from developers who've seen things.</p>
         </div>
 
-        <div class="mt-6 grid gap-5 md:grid-cols-3 lg:gap-6">
-            <x-preview-card number="01" emoji="💾" title="Database Backups" tagline="Automated, tested... or thoughts and prayers?" delay="250ms" />
-            <x-preview-card number="02" emoji="🚀" title="Deploy Strategies" tagline="Git push, SSH, or FTP and vibes?" delay="350ms" />
-            <x-preview-card number="03" emoji="💀" title="Production Nightmares" tagline="It always starts with a quick Slack message." delay="450ms" />
-        </div>
+        <form method="POST" action="{{ route('vote') }}" class="mt-6">
+            @csrf
+
+            <div class="grid gap-5 lg:grid-cols-3 lg:gap-6">
+                @foreach ($questions as $column => $question)
+                    <div role="radiogroup" aria-labelledby="{{ $column }}-question" class="flex flex-col rounded-2xl border border-line bg-ink/40 p-6 backdrop-blur-sm lg:p-7">
+                        <span class="font-mono text-xs text-mute">Question #0{{ $loop->iteration }}</span>
+                        <h3 id="{{ $column }}-question" class="mt-2 text-xl font-bold tracking-tight text-fg">{{ $question['question'] }}</h3>
+
+                        <div class="mt-5 flex flex-col gap-2.5">
+                            @foreach ($question['answers'] as $number => $answer)
+                                <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-line bg-paper/60 px-4 py-3 text-base text-body transition-colors hover:border-blue/50 has-checked:border-blue has-checked:bg-blue/15 has-checked:text-fg has-focus-visible:outline-2 has-focus-visible:outline-blue">
+                                    <input type="radio" name="{{ $column }}" value="{{ $number }}" required @checked((int) old($column) === $number) class="size-4 shrink-0 accent-blue">
+                                    <span>{{ $answer }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+
+                        @error($column)
+                            <p class="mt-3 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+                <a href="{{ route('results') }}" class="text-sm text-mute underline decoration-line underline-offset-4 hover:text-fg">See the results</a>
+                <button type="submit" class="w-full rounded-xl bg-blue-dark px-6 py-3.5 text-lg font-semibold text-white transition-colors hover:bg-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue sm:w-auto">
+                    Submit My Confessions 🔥
+                </button>
+            </div>
+        </form>
     </section>
 </x-layouts.app>
