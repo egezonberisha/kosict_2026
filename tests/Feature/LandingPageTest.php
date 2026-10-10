@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class LandingPageTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_the_landing_page_renders_the_conference_content(): void
     {
         $response = $this->get(route('home'));
@@ -31,17 +34,6 @@ class LandingPageTest extends TestCase
         $response = $this->get(route('home'));
 
         $response->assertSeeInOrder(['Production Confessions', 'Database Backups', 'Deploy Strategies', 'Production Nightmares'])
-            ->assertSee('Coming soon')
-            ->assertDontSee('<form', false);
-    }
-
-    public function test_the_landing_page_renders_without_a_database(): void
-    {
-        config([
-            'session.driver' => 'database',
-            'database.connections.sqlite.database' => '/nonexistent/database.sqlite',
-        ]);
-
-        $this->get(route('home'))->assertOk();
+            ->assertSee('Coming soon');
     }
 }

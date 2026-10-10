@@ -1,14 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
-use Illuminate\Session\Middleware\StartSession;
+use App\Http\Controllers\DemoMessageController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-/*
- * The landing page is static and stateless, so it skips the session
- * middleware. This keeps it working before a database is attached.
- */
-Route::view('/', 'welcome')
-    ->name('home')
-    ->withoutMiddleware([StartSession::class, ShareErrorsFromSession::class, PreventRequestForgery::class]);
+Route::get('/', [DemoMessageController::class, 'index'])->name('home');
+
+Route::post('/messages', [DemoMessageController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('demo-messages.store');

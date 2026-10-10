@@ -24,7 +24,7 @@ Connect this repository to a Laravel Cloud application and deploy the `main` bra
 - **Build command:** `composer install --no-dev && npm run build`
 - **Deploy command:** `php artisan migrate --force`
 
-The landing page is stateless and doesn't need a database. When a Laravel Cloud MySQL database is attached, Cloud injects the `DB_*` connection variables automatically. No credentials are stored in this repository.
+Attach a Laravel Cloud MySQL database **before** deploying: the homepage reads and writes the `demo_messages` table, and sessions are stored in the database. Cloud injects the `DB_*` connection variables automatically, and the deploy command creates the tables. No credentials are stored in this repository.
 
 ## Tests
 

@@ -45,6 +45,8 @@
         </div>
     </section>
 
+    <x-mysql-demo :messages="$messages" :message-count="$messageCount" :database-name="$databaseName" />
+
     <section aria-labelledby="preview-title" class="pb-12 lg:pb-14">
         <div class="flex items-center gap-4">
             <p class="text-sm font-semibold uppercase tracking-[0.24em] text-mute">Coming up in the live demo</p>
